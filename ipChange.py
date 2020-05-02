@@ -1,25 +1,37 @@
 from urllib import request
 import time
 import os
+import sys
 
 #将SCKEY填入下面
-SCKEY = ''
+SCKEY = 'SCU95384T96970d1e816d46892bc2a33e3f95a2eb5ea3164b6ee74'
 
 
 def getIP():
-    url = 'http://members.3322.org/dyndns/getip'
-    response = request.urlopen(url)
-    data = response.read()
-    data = str(data, encoding = "utf-8")
-    return data
+    try:
+        url = 'http://members.3322.org/dyndns/getip'
+        response = request.urlopen(url)
+        data = response.read()
+        data = str(data, encoding = "utf-8")
+        return data
+    except:
+        print('getIp failed wait 1 minute')
+        time.sleep(1*60)
+        return getIP()
 
 
 def sendToWechat(title, content):
-    url = 'https://sc.ftqq.com/' + SCKEY + '.send?text=' + title + '&desp=' + content
-    response=request.urlopen(url)
-    data=response.read()
-    data=str(data, encoding = "utf-8")
-    print(data)
+    try:
+        url = 'https://sc.ftqq.com/' + SCKEY + '.send?text=' + title + '&desp=' + content
+        response=request.urlopen(url)
+        data=response.read()
+        data=str(data, encoding = "utf-8")
+        print(data)
+    except:
+        print(sys.exc_info()[0])
+        print('sendToWechat failed wait 1 minute')
+        time.sleep(1*60)
+        sendToWechat(title, content)
 
 
 if __name__ == '__main__':
